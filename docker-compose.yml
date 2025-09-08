@@ -1,0 +1,28 @@
+# This file defines the multi-container application.
+# It runs a Node.js server and an Nginx reverse proxy.
+
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.server
+    ports:
+      - "3000" 
+    networks:
+      - chat-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile.nginx
+    ports:
+      - "80:80" 
+    depends_on:
+      - server
+    networks:
+      - chat-network
+
+networks:
+  chat-network:
+    driver: bridge
